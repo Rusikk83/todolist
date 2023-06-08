@@ -30,7 +30,7 @@ environ.Env.read_env(ENV_DIR)
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # False if not in os.environ because of casting above
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG')
 
 # Raises Django's ImproperlyConfigured
 # exception if SECRET_KEY not in os.environ

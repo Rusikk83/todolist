@@ -1,0 +1,14 @@
+name: build and deploy workflow
+on: [push]
+job:
+  build and push:
+    runs_on: ubuntu-latest
+    steps:
+      - name: clone code
+        uses: actions/checkout@v2
+      - name: docker build
+        run: docker built -t rusikk83/skypro_course7:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+      - name: docker login
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: docker push
+        run: docker push rusikk83/skypro_course7:$GITHUB_REF_NAME-$GITHUB_RUN_ID

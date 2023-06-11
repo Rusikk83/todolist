@@ -1,6 +1,6 @@
 name: build and deploy workflow
 on: [push]
-job:
+jobs:
   build and push:
     runs_on: ubuntu-latest
     steps:

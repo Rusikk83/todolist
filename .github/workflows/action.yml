@@ -19,8 +19,8 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ SOCIAL_AUTH_VK_OAUTH2_KEY }}
-      SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ SOCIAL_AUTH_VK_OAUTH2_SECRET }}
+      SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
+      SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
     steps:
       - name: clone code
         uses: actions/checkout@v2

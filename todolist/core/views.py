@@ -26,7 +26,7 @@ class LoginView(generics.CreateAPIView):
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    queryset = USER_MODEL.objects.all()
+    # queryset = USER_MODEL.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):

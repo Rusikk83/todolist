@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   front:
-    image: sermalenk/skypro-front:lesson-36
+    image: sermalenk/skypro-front:lesson-37
     ports:
       - 80:80
     depends_on:
@@ -34,8 +34,8 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_PASSWORD: $DB_PASSWORD # postgres
-      POSTGRES_DB: $DB_NAME # postgres
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
 #    ports:
 #      - 5432:5432
 

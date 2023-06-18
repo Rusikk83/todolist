@@ -19,7 +19,7 @@ class GoalCategoryCreateView(CreateAPIView):
 
 
 class GoalCategoryListView(ListAPIView):
-    model = GoalCategory
+
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategorySerializer
 
@@ -34,17 +34,16 @@ class GoalCategoryListView(ListAPIView):
 
     def get_queryset(self):
         return GoalCategory.objects.select_related('user').filter(
-            user=self.request.user, is_deleted=False
+            board__participants__user=self.request.user, is_deleted=False
         )
 
 
-class GoalCategoryView(RetrieveUpdateDestroyAPIView):
-    model = GoalCategory
-    serializer_class = GoalCategorySerializer
-    permission_classes = [permissions.IsAuthenticated, GoalCategoryPermission]
+class GoalCategoryDetailView(RetrieveUpdateDestroyAPIView):
 
-    def get_queryset(self):
-        return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
+    serializer_class = GoalCategorySerializer
+    permission_classes = [GoalCategoryPermission]
+
+    queryset = GoalCategory.objects.filter(is_deleted=False)
 
     def perform_destroy(self, instance: GoalCategory):
         with transaction.atomic():

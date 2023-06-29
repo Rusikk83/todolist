@@ -22,6 +22,7 @@ services:
         condition: service_completed_successfully
     volumes:
       - .env:/code/.env
+    command: python todolist/manage.py runserver 0.0.0.0:8000
 
   bot:
     build:
@@ -33,6 +34,7 @@ services:
         condition: service_completed_successfully
     volumes:
       - .env:/code/.env
+    command: python todolist/manage.py runbot
 
   migrations:
     build:

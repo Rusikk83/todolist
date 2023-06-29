@@ -21,6 +21,20 @@ services:
         condition: service_completed_successfully
     volumes:
       - .env:/code/.env
+    command: python todolist/manage.py runserver 0.0.0.0:8000
+
+  bot:
+    image: rusikk83/skypro_course7:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    #    ports:
+    #      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    volumes:
+      - .env:/code/.env
+    command: python todolist/manage.py runbot
 
   migrations:
     image: rusikk83/skypro_course7:$GITHUB_REF_NAME-$GITHUB_RUN_ID

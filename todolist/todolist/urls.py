@@ -22,6 +22,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include(('core.urls', 'core'))),
+    path('bot/', include(('bot.urls', 'bot'))),
     path('oauth/', include('social_django.urls', namespace='social')),
     path("goals/", include(("goals.urls", 'goals'))),
 

@@ -47,7 +47,7 @@ class Command(BaseCommand):
             self.handle_unauthorized_user(tg_user, msg)
 
     def handle_authorized_user(self, tg_user: TgUser, msg: Message):
-        if msg.text.startswith('/'):
+        if str(msg.text).startswith('/'):
             if msg.text == '/goals':
                 self.handle_goals_command(tg_user, msg)
 

@@ -22,7 +22,7 @@ class GoalListView(generics.ListAPIView):
     ordering = ['title']
     search_fields = ['title', 'description']
 
-    def get_queryset(self):
+    def get_queryset(self) -> None:
         return Goal.objects.filter(
           category__board__participants__user=self.request.user,
         ).exclude(status=Goal.Status.archived)
@@ -33,7 +33,7 @@ class GoalDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GoalSerializer
     queryset = Goal.objects.exclude(status=Goal.Status.archived)
 
-    def perform_destroy(self, instance: Goal):
+    def perform_destroy(self, instance: Goal) -> None:
         instance.status = Goal.Status.archived
         instance.save(update_fields=['status'])
 

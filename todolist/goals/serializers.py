@@ -53,14 +53,17 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "user")
 
     def validate_category(self, value: GoalCategory) -> GoalCategory:
-        if value.is_deleted:
-            raise ValidationError('Category not fuond')
+
         if not BoardParticipant.objects.filter(
                 board_id=value.board_id,
                 role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
                 user_id=self.context['request'].user
         ).exists():
-            raise PermissionDenied
+            raise PermissionDenied('mast be owner or writer role')
+
+        if value.is_deleted:
+            raise ValidationError('Category not found')
+
         return value
 
     def validate_due_date(self, value: DateField) -> DateField:

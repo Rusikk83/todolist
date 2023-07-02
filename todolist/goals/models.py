@@ -63,7 +63,7 @@ class Goal(BaseModel):
     status = models.PositiveSmallIntegerField(choices=Status.choices, default=Status.to_do)
     priority = models.PositiveSmallIntegerField(choices=Priority.choices, default=Priority.medium)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
 
 class GoalComment(BaseModel):
@@ -71,7 +71,7 @@ class GoalComment(BaseModel):
     goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
     text = models.TextField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text
 
 

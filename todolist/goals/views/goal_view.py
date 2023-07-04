@@ -8,10 +8,16 @@ from goals.serializers import GoalCreateSerializer, GoalSerializer
 from goals.models import Goal
 from goals.permissions import GoalPermission
 
+""" представление для создания цели"""
+
 
 class GoalCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCreateSerializer
+
+
+""" представление для получения списка целей пользователя"""
+
 
 class GoalListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -24,8 +30,12 @@ class GoalListView(generics.ListAPIView):
 
     def get_queryset(self) -> None:
         return Goal.objects.filter(
-          category__board__participants__user=self.request.user,
+            category__board__participants__user=self.request.user,  # выборка целей на досках,
+            # для которых пользователь является участником
         ).exclude(status=Goal.Status.archived)
+
+
+""" представление для операций с целью"""
 
 
 class GoalDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -34,11 +44,5 @@ class GoalDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Goal.objects.exclude(status=Goal.Status.archived)
 
     def perform_destroy(self, instance: Goal) -> None:
-        instance.status = Goal.Status.archived
+        instance.status = Goal.Status.archived  # признак архивации вместо удаления цели
         instance.save(update_fields=['status'])
-
-
-
-
-
-

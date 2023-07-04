@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+
 
 from core.models import User
 
@@ -66,6 +66,7 @@ class Goal(BaseModel):
     def __str__(self) -> str:
         return self.title
 
+
 class GoalComment(BaseModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
@@ -73,12 +74,3 @@ class GoalComment(BaseModel):
 
     def __str__(self) -> str:
         return self.text
-
-
-
-
-
-
-
-
-

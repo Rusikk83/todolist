@@ -8,9 +8,16 @@ from goals.models import GoalComment
 from goals.permissions import GoalCommentPermission
 
 
+""" представление для создания коментария"""
+
+
 class GoalCommentCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCommentCreateSerializer
+
+
+""" представление для получения списка категорий пользователя"""
+
 
 class GoalCommentListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -20,14 +27,20 @@ class GoalCommentListView(generics.ListAPIView):
     ordering = ['-created']
 
     def get_queryset(self) -> QuerySet[GoalComment]:
-        return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
+        return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)  # выборка
+        # комментариев по целям, которые размещены на досках с участником пользователем
+
+
+""" представление для операций  по комментарию"""
+
 
 class GoalCommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [GoalCommentPermission]
     serializer_class = GoalCommentDetailSerializer
 
     def get_queryset(self) -> QuerySet[GoalComment]:
-        return GoalComment.objects.select_related('user').filter(
+        return GoalComment.objects.select_related('user').filter(  # выборка комментариев для целей на досках,
+            # для которых пользователь является участником
             goal__category__board__participants__user=self.request.user
         )
 

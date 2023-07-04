@@ -18,14 +18,14 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
 
     def validate_board(self, board: Board) -> Board:
         if board.is_deleted:
-            raise ValidationError('board is deleted')
+            raise ValidationError('board is deleted')  # если доска удалена
 
         if not BoardParticipant.objects.filter(
             board_id=board.id,
             role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
             user_id=self.context['request'].user
         ).exists():
-            raise PermissionDenied
+            raise PermissionDenied  # если пользователь не участник с правом редактирования
 
         return board
 
@@ -59,16 +59,17 @@ class GoalCreateSerializer(serializers.ModelSerializer):
                 role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
                 user_id=self.context['request'].user
         ).exists():
-            raise PermissionDenied('mast be owner or writer role')
+            raise PermissionDenied('mast be owner or writer role')  # если пользователь не участник доски
+            # с правом редактирования
 
         if value.is_deleted:
-            raise ValidationError('Category not found')
+            raise ValidationError('Category not found')  # если категория удалена
 
         return value
 
     def validate_due_date(self, value: DateField) -> DateField:
         if value < timezone.now().date():
-            raise ValidationError("End-date can't be in the past")
+            raise ValidationError("End-date can't be in the past")  # если дедлайн в прошедшем времени
         return value
 
 
@@ -84,7 +85,6 @@ class GoalSerializer(serializers.ModelSerializer):
 class GoalCommentCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-
     class Meta:
         model = GoalComment
         fields = '__all__'
@@ -98,7 +98,7 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
                 role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
                 user_id=self.context['request'].user
         ).exists():
-            raise PermissionDenied
+            raise PermissionDenied  # если пользователь не участник доски с правом редактирования
         return value
 
 
@@ -118,6 +118,7 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", 'is_deleted')
         fields = '__all__'
 
+
 class BoardParticipantSerializer(serializers.ModelSerializer):
 
     role = serializers.ChoiceField(required=True, choices=BoardParticipant.editable_roles)
@@ -130,7 +131,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
 
     def validate_user(self, user: User) -> User:
         if self.context['request'].user == user:
-            raise ValidationError('Failed to change your role')
+            raise ValidationError('Failed to change your role')  # изменить участие владельца нельзя
         return user
 
 
@@ -141,8 +142,9 @@ class BoardDetailSerializer(BoardSerializer):
         request: Request = self.context['request']
 
         with transaction.atomic():
-            BoardParticipant.objects.filter(board=instance).exclude(user=request.user).delete()
-            BoardParticipant.objects.bulk_create(
+            BoardParticipant.objects.filter(board=instance).exclude(user=request.user).delete()  # удаляем участников
+            # кроме владельца
+            BoardParticipant.objects.bulk_create(  # создаем всех участников заново
                 [
                     BoardParticipant(user=participant['user'], role=participant['role'], board=instance)
                     for participant in validated_data.get('participants', [])
@@ -150,22 +152,9 @@ class BoardDetailSerializer(BoardSerializer):
                 ignore_conflicts=True,
             )
 
-            if title := validated_data.get('title'):
+            if title := validated_data.get('title'):  # если меняется описание доски
                 instance.title = title
 
             instance.save()
 
         return instance
-
-
-
-
-
-
-
-
-
-
-
-
-

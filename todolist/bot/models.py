@@ -16,7 +16,7 @@ class TgUser(models.Model):
     def __str__(self):
         return f'{self.__class__.__name__} {self.chat_id}'
 
-    def update_verification_code(self):
+    def update_verification_code(self):  # генерация и присвоение кода генерации
         self.verification_code = self._generate_verification_code()
         self.save(update_fields=['verification_code'])
 

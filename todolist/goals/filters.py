@@ -2,7 +2,7 @@ from django_filters import rest_framework
 
 from goals.models import Goal
 
-
+"""фильтр для целей"""
 class GoalFilter(rest_framework.FilterSet):
     class Meta:
         model = Goal

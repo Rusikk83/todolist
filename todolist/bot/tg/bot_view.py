@@ -19,5 +19,3 @@ class VerificationView(generics.GenericAPIView):
         TgClient().send_message(tg_user.chat_id, 'Bot token verified')
 
         return Response(serializer.data)
-
-

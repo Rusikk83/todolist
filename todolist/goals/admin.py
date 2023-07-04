@@ -1,9 +1,9 @@
-from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
 
 from goals.models import GoalCategory, GoalComment, Goal
+
 
 @admin.register(GoalCategory)
 class GoalCategoryAdmin(admin.ModelAdmin):
@@ -16,6 +16,7 @@ class GoalCategoryAdmin(admin.ModelAdmin):
 class CommentsInLine(admin.StackedInline):
     model = GoalComment
     extra = 0
+
 
 @admin.register(Goal)
 class GoalAdmin(admin.ModelAdmin):
